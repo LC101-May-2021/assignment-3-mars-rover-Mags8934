@@ -1,5 +1,46 @@
 class Rover {
    // Write code here!
-}
+   constructor(position, mode = "NORMAL", generatorWatts = 110) {
+     this.position = position;
+     this.mode = mode;
+     this.generatorWatts = generatorWatts;     
+   }
+  receiveMessage(message) {
+    let response = {message:message.name, results:[]};
+
+    for(let i=0; i < message.commands.length; i++) {
+
+        if (message.commands[i].commandType === "STATUS_CHECK") {
+          response.results.push({
+                  completed: true, 
+                  roverStatus: {
+                    mode: this.mode, 
+                    generatorWatts: this.generatorWatts,
+                    position: this.position
+                    }});
+         } 
+        else if (message.commands[i].commandType === "MODE_CHANGE") { 
+          if(message.commands[i].value === "NORMAL") 
+              response.results.push({
+                completed:true
+                });
+            if (message.commands[i].value === "LOW_POWER") 
+                response.results.push({
+                  completed:false});
+        }      
+        else if (message.commands[i].commandType === "MOVE") {
+          if (this.mode === "LOW_POWER") 
+            response.results.push({
+              completed: false });
+          if (this.mode === "NORMAL")
+            response.results.push({
+              completed: true,
+              position: message.commands[i].value })
+            }
+        }
+    //  console.log(response);
+    return response
+    }};
+
 
 module.exports = Rover;
