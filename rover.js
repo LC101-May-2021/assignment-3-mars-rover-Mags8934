@@ -19,25 +19,24 @@ class Rover {
                     position: this.position
                     }});
          } 
-        else if (message.commands[i].commandType === "MODE_CHANGE") { 
-          if(message.commands[i].value === "NORMAL") 
+          else if (message.commands[i].commandType === "MOVE") {
+          if (this.mode === "LOW_POWER") {
+            response.results.push({
+              completed: false
+              });
+           } else {
+            response.results.push({
+              completed: true });
+              this.position = message.commands[i].value; 
+            };
+      
+        } else if (message.commands[i].commandType === "MODE_CHANGE") {
               response.results.push({
-                completed:true
-                });
-            if (message.commands[i].value === "LOW_POWER") 
-                response.results.push({
-                  completed:false});
-        }      
-        else if (message.commands[i].commandType === "MOVE") {
-          if (this.mode === "LOW_POWER") 
-            response.results.push({
-              completed: false });
-          if (this.mode === "NORMAL")
-            response.results.push({
-              completed: true,
-              position: message.commands[i].value })
-            }
-        }
+                completed:true});
+                this.mode = message.commands[i].value;
+            
+        }}      
+
     //  console.log(response);
     return response
     }};

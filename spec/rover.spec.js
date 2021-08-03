@@ -73,10 +73,11 @@ it("response returned by receiveMessage contains name of message", function() {
 // Test 12
     it("responds with false completed value when attempting to move in LOW_POWER mode", function() {
       let rover = new Rover(1127)
-    let commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('MOVE', 240)];
+    rover.mode = "LOW_POWER"
+    let commands = [new Command('MOVE', 240)];
     let message = new Message("TDD is Fun", commands);
     let response = rover.receiveMessage(message).results[0];
-    let results = { completed: false}
+    let results = {completed: false};
 // console.log(response);
     expect(response).toEqual(results);
   })
@@ -88,8 +89,7 @@ it("response returned by receiveMessage contains name of message", function() {
       let commands = [new Command('MOVE', 240)];
       let message = new Message("TDD is Fun", commands);
       let response = rover.receiveMessage(message).results[0];
-      let results = { completed: true, 
-                      position: 240}
+      let results = { completed: true}; this.position = commands.value;
 // console.log(response);
     expect(response).toEqual(results);
   })
